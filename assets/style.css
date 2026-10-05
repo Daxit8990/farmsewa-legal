@@ -1,15 +1,86 @@
-:root { --bg: #faf8ef; --text: #5f574f; --title: #776e65; --card: #f3ede3; }
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #1e1b18; --text: #d6cdc4; --title: #eee4da; --card: #2b2723; }
+/* Matches the 2048 app UI: same colors, cards, rows and type sizes. */
+:root {
+  --background: #faf8ef; --title: #776e65; --text: #776e65;
+  --card: #f3ede3; --border: #e2d8cc; --button: #8f7a66; --button-text: #f9f6f2;
+  color-scheme: light;
 }
-body { margin: 0; background: var(--bg); color: var(--text);
-       font: 17px/1.6 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; }
-main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
-h1, h2 { color: var(--title); }
-h1 { font-size: 32px; margin-bottom: 4px; }
-h2 { font-size: 20px; margin-top: 28px; }
-.updated { opacity: .8; margin-top: 0; }
-a { color: inherit; }
-ul.cards { list-style: none; padding: 0; }
-ul.cards li { background: var(--card); border-radius: 10px; padding: 14px 18px; margin: 10px 0; }
-.back { display: inline-block; margin-bottom: 16px; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #1e1b18; --title: #eee4da; --text: #d6cdc4;
+    --card: #2b2723; --border: #3d3731; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --background: #1e1b18; --title: #eee4da; --text: #d6cdc4;
+  --card: #2b2723; --border: #3d3731; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--background); color: var(--text);
+  font: 16px/23px -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+a { color: inherit; text-decoration: none; }
+
+/* Top bar, like the app's navigation header */
+.topbar {
+  position: sticky; top: 0; z-index: 1; background: var(--background);
+  display: flex; align-items: center; gap: 4px;
+  height: 56px; padding: 0 8px; max-width: 600px; margin: 0 auto;
+}
+.topbar .back {
+  font-size: 34px; line-height: 1; color: var(--title);
+  width: 40px; height: 40px; display: grid; place-items: center; border-radius: 20px;
+}
+.topbar .back:hover { background: var(--border); }
+.topbar h1 { margin: 0; font-size: 20px; font-weight: 600; color: var(--title); }
+
+/* Page content, like the app's Screen: 16px padding, 20px gap, max 600px */
+main {
+  display: flex; flex-direction: column; gap: 20px;
+  max-width: 600px; margin: 0 auto; padding: 16px 16px 40px;
+}
+.section { display: flex; flex-direction: column; gap: 8px; }
+.section-title {
+  margin: 0 0 0 4px; font-size: 13px; line-height: 18px; font-weight: 600;
+  letter-spacing: .8px; text-transform: uppercase; color: var(--text);
+}
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.card h2 {
+  margin: 0; padding: 14px 16px 0; font-size: 17px; line-height: 22px;
+  font-weight: bold; color: var(--title);
+}
+.card p { margin: 0; padding: 8px 16px; }
+.card > :last-child { padding-bottom: 14px; }
+.card a:not(.row) { text-decoration: underline; }
+
+/* List rows, like the app's ListRow */
+.row {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 10px 16px; color: var(--title);
+}
+.card > .row:last-child { padding-bottom: 10px; }
+.row + .row { border-top: 1px solid var(--border); }
+.row:active, .row:hover { background: var(--border); }
+.row .label { flex: 1; min-width: 0; font-size: 17px; }
+.row .label small { display: block; font-size: 13px; line-height: 18px; color: var(--text); }
+.row .value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; color: var(--text); }
+.row .chevron { font-size: 24px; line-height: 26px; color: var(--text); }
+.row img { width: 44px; height: 44px; border-radius: 10px; }
+
+/* App header, like the About screen */
+.app-head { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 8px; }
+.app-head img { width: 96px; height: 96px; border-radius: 22px; }
+.app-head .name { font-size: 24px; font-weight: bold; color: var(--title); }
+.app-head .sub { font-size: 14px; }
+
+.updated { margin: 0 0 0 4px; font-size: 13px; }
+.copyright { text-align: center; font-size: 13px; margin: 0; }
+
+/* Inside the app: the native header already shows the title */
+.embed .topbar, .embed .copyright { display: none; }
